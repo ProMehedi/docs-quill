@@ -1,9 +1,10 @@
 import React from 'react'
+import MaxWidthWrapper from '~/app/components/MaxWidthWrapper'
 
 type Props = {}
 
 const Page = (props: Props) => {
-  return <div>Page</div>
+  return <MaxWidthWrapper className='bg-red-600'>Page</MaxWidthWrapper>
 }
 
 export default Page
