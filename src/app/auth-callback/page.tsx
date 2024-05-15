@@ -1,3 +1,4 @@
+'use client'
 import React from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { trpc } from '../_trpc/client'
@@ -8,8 +9,8 @@ const Page = () => {
   const searchparams = useSearchParams()
   const origin = searchparams.get('origin')
 
-  const { data } = trpc.test.useQuery()
-  console.log(data)
+  const { data, isLoading, isSuccess } = trpc.authCallback.useQuery()
+  console.log(isSuccess)
 
   return <div>Page</div>
 }
