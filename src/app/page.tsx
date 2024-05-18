@@ -26,7 +26,7 @@ const Page = (props: Props) => {
         </p>
         <Link
           className={buttonVariants({ size: 'lg', className: 'mt-5' })}
-          href='/ dashboard'
+          href='/dashboard'
           target='_blank'
         >
           Get started <ArrowRight size={20} className='ml-2 h-5 w-5' />
