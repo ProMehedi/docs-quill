@@ -1,12 +1,13 @@
 'use client'
 import React from 'react'
+import { Ghost } from 'lucide-react'
+import Skeleton from 'react-loading-skeleton'
+
 import UploadButton from './UploadButton'
 import { trpc } from '~/app/_trpc/client'
 
 const Dashboard = () => {
-  const { data: files } = trpc.getUserFiles.useQuery()
-
-  console.log(files)
+  const { data: files, isLoading } = trpc.getUserFiles.useQuery()
 
   return (
     <main className='mx-auto max-w-7xl md:p-10'>
@@ -15,6 +16,18 @@ const Dashboard = () => {
 
         <UploadButton />
       </div>
+
+      {files && files.length > 0 ? (
+        <div>Hello</div>
+      ) : isLoading ? (
+        <Skeleton className='my-2' count={3} height={100} />
+      ) : (
+        <div className='mt-16 flex flex-col items-center gap-2'>
+          <Ghost className='text-zinc-800' size={30} />
+          <h3 className='font-semibold text-xl'>Pretty empty around here</h3>
+          <p>Let's upload your first PDF.</p>
+        </div>
+      )}
     </main>
   )
 }
