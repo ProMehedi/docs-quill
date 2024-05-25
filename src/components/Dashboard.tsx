@@ -1,7 +1,7 @@
 'use client'
 import React from 'react'
 import Link from 'next/link'
-import { Ghost, MessageSquare, Plus, Trash } from 'lucide-react'
+import { Ghost, Loader2, MessageSquare, Plus, Trash } from 'lucide-react'
 import Skeleton from 'react-loading-skeleton'
 import { format } from 'date-fns'
 
@@ -9,13 +9,16 @@ import UploadButton from './UploadButton'
 import { trpc } from '~/app/_trpc/client'
 
 const Dashboard = () => {
+  const [currentlyDel, setCurrentlyDel] = React.useState<string | null>(null)
+
   const utils = trpc.useUtils()
   const { data: files, isLoading } = trpc.getUserFiles.useQuery()
-
   const { mutate: deleteFile } = trpc.deleteFile.useMutation({
     onSuccess: () => {
       utils.getUserFiles.invalidate()
     },
+    onMutate: ({ id }) => setCurrentlyDel(id),
+    onSettled: () => setCurrentlyDel(null),
   })
 
   return (
@@ -71,7 +74,11 @@ const Dashboard = () => {
                     className='text-destructive hover:text-red-700 transition'
                     onClick={() => deleteFile({ id: file.id })}
                   >
-                    <Trash size={16} />
+                    {currentlyDel === file.id ? (
+                      <Loader2 className='animate-spin' size={16} />
+                    ) : (
+                      <Trash size={16} />
+                    )}
                   </button>
                 </div>
               </li>
