@@ -9,7 +9,14 @@ import UploadButton from './UploadButton'
 import { trpc } from '~/app/_trpc/client'
 
 const Dashboard = () => {
+  const utils = trpc.useUtils()
   const { data: files, isLoading } = trpc.getUserFiles.useQuery()
+
+  const { mutate: deleteFile } = trpc.deleteFile.useMutation({
+    onSuccess: () => {
+      utils.getUserFiles.invalidate()
+    },
+  })
 
   return (
     <main className='mx-auto max-w-7xl md:p-10'>
@@ -62,6 +69,7 @@ const Dashboard = () => {
                     title='Delete file'
                     type='button'
                     className='text-destructive hover:text-red-700 transition'
+                    onClick={() => deleteFile({ id: file.id })}
                   >
                     <Trash size={16} />
                   </button>
